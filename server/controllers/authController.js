@@ -14,7 +14,7 @@ const createToken = (user) => {
   return jwt.sign(
     { userId: user.id, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "1d" },
   );
 };
 
@@ -39,7 +39,7 @@ exports.login = async (req, res) => {
     });
     return res.status(201).json({
       message: "Login successful",
-      user: userData,
+      user: { ...userData, token }, // THÊM TOKEN VÀO RESPONSE
       role: user.role,
     });
   } catch (error) {
@@ -106,7 +106,11 @@ exports.googleCallback = (req, res) => {
     maxAge: 60 * 60 * 1000, // 1 hour
   });
 
-  res.redirect(`${process.env.FRONT_URL}/?loggedIn=true`);
+  // Encode token để pass qua URL
+  const encodedToken = encodeURIComponent(token);
+  res.redirect(
+    `${process.env.FRONT_URL}/?loggedIn=true&token=${encodedToken}&user=${encodeURIComponent(JSON.stringify(req.user))}`,
+  );
 };
 
 exports.facebookCallback = (req, res) => {
@@ -125,7 +129,12 @@ exports.facebookCallback = (req, res) => {
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // or "strict"
     maxAge: 60 * 60 * 1000, // 1 hour
   });
-  res.redirect(`${process.env.FRONT_URL}/?loggedIn=true`);
+
+  // Encode token để pass qua URL
+  const encodedToken = encodeURIComponent(token);
+  res.redirect(
+    `${process.env.FRONT_URL}/?loggedIn=true&token=${encodedToken}&user=${encodeURIComponent(JSON.stringify(req.user))}`,
+  );
 };
 
 exports.getUserInfo = async (req, res) => {
@@ -190,7 +199,7 @@ exports.updateProfile = async (req, res) => {
     const updatedUser = await updateProfileService(
       req.user.userId,
       req.body,
-      req.file
+      req.file,
     );
 
     res.json({ success: true, user: updatedUser });

@@ -435,11 +435,12 @@ export default function Product() {
       fd.delete("tags");
       fd.append("tags", JSON.stringify(tags.length ? tags : [])); // luôn gửi []
 
-      // Get token from localStorage or cookies
-      const user = localStorage.getItem("user");
-      const token = user ? JSON.parse(user).token : "";
+      // Get token from localStorage (stored separately)
+      const token = localStorage.getItem("token") || "";
+      console.log("🔑 Token from localStorage:", token);
 
       if (!token) {
+        console.error("❌ No token found!");
         setAnnouncement({
           type: "error",
           message: "Authentication token not found. Please login again!",
@@ -448,9 +449,8 @@ export default function Product() {
         return;
       }
 
-      // Build URL params for product data
+      // Build URL params for product data (remove token from params)
       const params = new URLSearchParams();
-      params.append("token", token);
       params.append("title", title);
       params.append("description", description);
       params.append("category", category);
@@ -482,7 +482,10 @@ export default function Product() {
       const method = editing ? "put" : "post";
 
       await axios[method](url, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (editing) {
@@ -495,6 +498,10 @@ export default function Product() {
       setEditing(null);
       resetForm();
     } catch (error) {
+      console.error("❌ Error adding/updating product:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+
       if (error.response && error.response.data) {
         setAnnouncement({
           type: "error",
@@ -520,9 +527,8 @@ export default function Product() {
     try {
       setLoading(true);
 
-      // Get token from localStorage
-      const user = localStorage.getItem("user");
-      const token = user ? JSON.parse(user).token : "";
+      // Get token from localStorage (stored separately)
+      const token = localStorage.getItem("token") || "";
 
       if (!token) {
         setAnnouncement({
@@ -538,9 +544,11 @@ export default function Product() {
       params.append("token", token);
 
       const baseUrl = import.meta.env.VITE_API_URL;
-      const url = `${baseUrl}/api/admin/products/token-auth/delete/${selectedId}?${params.toString()}`;
+      const url = `${baseUrl}/api/admin/products/token-auth/delete/${selectedId}`;
 
-      await axios.delete(url);
+      await axios.delete(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setAnnouncement({ message: "Delete product successfully" });
       setTimeout(() => {
         fetchProducts();
