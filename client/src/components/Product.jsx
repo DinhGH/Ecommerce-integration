@@ -518,6 +518,8 @@ export default function Product() {
     }
   };
 
+  //comment delete product
+
   const handleDeleteClick = (id) => {
     setSelectedId(id);
     setShowConfirm(true);
