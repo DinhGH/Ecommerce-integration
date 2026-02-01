@@ -436,7 +436,9 @@ export default function Product() {
       fd.append("tags", JSON.stringify(tags.length ? tags : [])); // luôn gửi []
 
       // Get token from localStorage (stored separately)
-      const token = localStorage.getItem("token") || "";
+      const userStr = localStorage.getItem("user");
+      const userObj = userStr ? JSON.parse(userStr) : null;
+      const token = userObj?.token || "";
       console.log("🔑 Token from localStorage:", token);
 
       if (!token) {
