@@ -77,7 +77,7 @@ export default function ProductCard({ product }) {
           </svg>
         ))}
         <span className="text-sm text-gray-600 ml-2">
-          {product.rating.toFixed(1)}/5
+          {product.rating ? product.rating.toFixed(1) : "0"}/5
         </span>
       </div>
     </div>

@@ -475,6 +475,7 @@ export default function Product() {
       }
 
       const baseUrl = import.meta.env.VITE_API_URL;
+      params.append("token", token);
       const url = editing
         ? `${baseUrl}/api/admin/products/token-auth/update/${editing}?${params.toString()}`
         : `${baseUrl}/api/admin/products/token-auth/add?${params.toString()}`;
