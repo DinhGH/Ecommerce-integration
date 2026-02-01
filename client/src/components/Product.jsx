@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 // src/admin/component/Product.jsx
 import React, { useState, useEffect } from "react";
@@ -292,26 +293,26 @@ export default function Product() {
       }
 
       // === 4. FILE VALIDATION ===
-      if (!editing && !thumbnailFile && !thumbnailUrlText) {
-        setAnnouncement({
-          type: "error",
-          message: "Please upload a thumbnail image for the product!",
-        });
-        setLoading(false);
-        return;
-      }
+      // if (!editing && !thumbnailFile && !thumbnailUrlText) {
+      //   setAnnouncement({
+      //     type: "error",
+      //     message: "Please upload a thumbnail image for the product!",
+      //   });
+      //   setLoading(false);
+      //   return;
+      // }
 
-      if (
-        thumbnailFile &&
-        !["image/jpeg", "image/png", "image/webp"].includes(thumbnailFile.type)
-      ) {
-        setAnnouncement({
-          type: "error",
-          message: "Thumbnail must be JPG, PNG, or WEBP format!",
-        });
-        setLoading(false);
-        return;
-      }
+      // if (
+      //   thumbnailFile &&
+      //   !["image/jpeg", "image/png", "image/webp"].includes(thumbnailFile.type)
+      // ) {
+      //   setAnnouncement({
+      //     type: "error",
+      //     message: "Thumbnail must be JPG, PNG, or WEBP format!",
+      //   });
+      //   setLoading(false);
+      //   return;
+      // }
 
       if (imageFiles?.length > 0) {
         for (const file of imageFiles) {
@@ -335,23 +336,23 @@ export default function Product() {
       }
 
       // === 5. BARCODE + QRCODE ===
-      if (!barcodeFile && !barcode) {
-        setAnnouncement({
-          type: "error",
-          message: "Please upload or provide a barcode!",
-        });
-        setLoading(false);
-        return;
-      }
+      // if (!barcodeFile && !barcode) {
+      //   setAnnouncement({
+      //     type: "error",
+      //     message: "Please upload or provide a barcode!",
+      //   });
+      //   setLoading(false);
+      //   return;
+      // }
 
-      if (!qrCodeFile && !qrCode) {
-        setAnnouncement({
-          type: "error",
-          message: "Please upload or provide a QR code!",
-        });
-        setLoading(false);
-        return;
-      }
+      // if (!qrCodeFile && !qrCode) {
+      //   setAnnouncement({
+      //     type: "error",
+      //     message: "Please upload or provide a QR code!",
+      //   });
+      //   setLoading(false);
+      //   return;
+      // }
 
       // === 6. TAGS ===
       if (tagsText) {
